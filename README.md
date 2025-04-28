@@ -3,6 +3,18 @@ AI API Test game
 
 This project is meant to demo the use of creating dynamic stories using ChatGPT API. This project was built using Test Driven development. Meaning tests were written using this README.md first, and then the code for the game was written.
 
+Developers writing for this game are encouraged to follow these best practices.
+
+
+- **Coding Philosophy:**
+    - **Don’t assume behavior—always verify.**
+    - **Refactor for simplicity and reusability.**
+    - **Avoid deep nesting in async code—use sequence patterns instead.**
+    - **Write robust, tested code.** No assumptions; validate edge cases.
+    - **Use mixins and pluggable systems** where applicable.
+    - **SOLID principles, GRASP, GoF Design Patterns, and DDD**
+
+
 ## Game Start
 
 The game first asks the player their name and a small description about their character. This is then used for chatGPT to create a story about why the charcter is in the Library of Babel and what information they are looking for.

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library of Babel</title>
+    <link rel="stylesheet" href="src/css/style.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="game-canvas"></canvas>
+        <div id="dialog-container" class="hidden">
+            <div id="dialog-content"></div>
+            <button id="dialog-close">Close</button>
+        </div>
+        <div id="book-container" class="hidden">
+            <div id="book-content"></div>
+            <div id="book-navigation">
+                <button id="prev-page">Previous Page</button>
+                <span id="page-number">1</span>
+                <button id="next-page">Next Page</button>
+            </div>
+            <button id="book-close">Close Book (E)</button>
+        </div>
+    </div>
+
+    <!-- Character Creation Screen -->
+    <div id="character-creation" class="screen">
+        <h1>The Library of Babel</h1>
+        <div class="form-container">
+            <div class="input-group">
+                <label for="player-name">Your Name:</label>
+                <input type="text" id="player-name" placeholder="Enter your name...">
+            </div>
+            <div class="input-group">
+                <label for="character-description">Describe your character (appearance, personality, background):</label>
+                <textarea id="character-description" rows="4" placeholder="Enter a description of your character..."></textarea>
+            </div>
+            <button id="start-game">Begin Journey</button>
+        </div>
+    </div>    <!-- Scripts -->
+    <script src="src/js/debug.js"></script>
+    <script src="src/js/config.js"></script>
+    <script src="src/js/mockData.js"></script>
+    <script src="src/js/api.js"></script>
+    <script src="src/js/save.js"></script>
+    <script src="src/js/book.js"></script>
+    <script src="src/js/library.js"></script>
+    <script src="src/js/player.js"></script>
+    <script src="src/js/ui.js"></script>
+    <script src="src/js/game.js"></script>
+    <script src="src/js/main.js"></script>
+</body>
+</html>

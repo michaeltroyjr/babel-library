@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library of Babel - Tests</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background-color: #f5f5f5;
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        #test-results {
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        
+        .failure {
+            color: red;
+            font-weight: bold;
+        }
+        
+        .console-output {
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Library of Babel - Test Suite</h1>
+    
+    <div id="test-results">
+        <p>Click the button below to run tests:</p>
+        <button id="run-tests">Run Tests</button>
+        
+        <div class="console-output" id="test-output">Test results will appear here...</div>
+          <div id="summary"></div>
+        
+        <p>After testing, you can <a href="index.html">return to the main game</a>.</p>
+    </div>
+    
+    <!-- Load all scripts from the game -->
+    <script src="src/js/config.js"></script>
+    <script src="src/js/mockData.js"></script>
+    <script src="src/js/api.js"></script>
+    <script src="src/js/save.js"></script>
+    <script src="src/js/book.js"></script>
+    <script src="src/js/library.js"></script>
+    <script src="src/js/player.js"></script>
+    <script src="src/js/ui.js"></script>
+    <script src="src/js/game.js"></script>
+    
+    <!-- Load test scripts -->
+    <script src="src/js/test.js"></script>
+    <script src="src/js/uitests.js"></script>
+    
+    <script>
+        // Capture console output to display in the page
+        const originalConsoleLog = console.log;
+        const originalConsoleError = console.error;
+        const originalConsoleGroup = console.group;
+        const originalConsoleGroupEnd = console.groupEnd;
+        
+        const testOutput = document.getElementById('test-output');
+        const summaryElement = document.getElementById('summary');
+        let currentIndent = 0;
+        
+        console.log = function() {
+            const args = Array.from(arguments);
+            const message = args.join(' ');
+            
+            // Format the indent
+            let indentStr = '';
+            for (let i = 0; i < currentIndent; i++) {
+                indentStr += '  ';
+            }
+            
+            // Add to the output
+            testOutput.innerHTML += `${indentStr}${message}\n`;
+            testOutput.scrollTop = testOutput.scrollHeight;
+            
+            // Also call original console.log
+            originalConsoleLog.apply(console, arguments);
+        };
+        
+        console.error = function() {
+            const args = Array.from(arguments);
+            const message = args.join(' ');
+            
+            // Format the indent and color
+            let indentStr = '';
+            for (let i = 0; i < currentIndent; i++) {
+                indentStr += '  ';
+            }
+            
+            // Add to the output with red color
+            testOutput.innerHTML += `${indentStr}<span style="color: red;">${message}</span>\n`;
+            testOutput.scrollTop = testOutput.scrollHeight;
+            
+            // Also call original console.error
+            originalConsoleError.apply(console, arguments);
+        };
+        
+        console.group = function() {
+            const args = Array.from(arguments);
+            const message = args.join(' ');
+            
+            // Format the indent
+            let indentStr = '';
+            for (let i = 0; i < currentIndent; i++) {
+                indentStr += '  ';
+            }
+            
+            // Add to the output in bold
+            testOutput.innerHTML += `${indentStr}<strong>${message}</strong>\n`;
+            testOutput.scrollTop = testOutput.scrollHeight;
+            
+            // Increase indent
+            currentIndent++;
+            
+            // Also call original console.group
+            originalConsoleGroup.apply(console, arguments);
+        };
+        
+        console.groupEnd = function() {
+            // Decrease indent
+            currentIndent = Math.max(0, currentIndent - 1);
+            
+            // Also call original console.groupEnd
+            originalConsoleGroupEnd.apply(console, arguments);
+        };
+        
+        // Run tests button
+        document.getElementById('run-tests').addEventListener('click', async function() {
+            testOutput.innerHTML = 'Running tests...\n\n';
+            summaryElement.innerHTML = '';
+            
+            try {
+                const result = await window.runBabelTests();
+                
+                if (result) {
+                    summaryElement.innerHTML = '<p class="success">✅ All tests passed! The game should be functioning correctly.</p>';
+                } else {
+                    summaryElement.innerHTML = '<p class="failure">❌ Some tests failed. There might be issues with the game implementation.</p>';
+                }
+            } catch (error) {
+                testOutput.innerHTML += `\n<span style="color: red;">Error running tests: ${error.message}</span>\n`;
+                console.error('Error running tests:', error);
+                summaryElement.innerHTML = '<p class="failure">❌ Error running tests. Check the console for details.</p>';
+            }
+        });
+    </script>
+</body>
+</html>
