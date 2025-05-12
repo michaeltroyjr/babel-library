@@ -109,8 +109,11 @@ class UIHandler {
         this.dialogClose.style.marginTop = '20px';
         this.dialogClose.focus(); // Focus on the close button
         
-        // Log for debugging
-        console.log('Story dialog shown, waiting for user to close it');
+        // Log for debugging        console.log('Story dialog shown, waiting for user to close it');
+        console.log('Dialog content:', content);
+        console.log('Dialog container classList before update:', this.dialogContainer.classList);
+        this.dialogContainer.classList.remove('hidden');
+        console.log('Dialog container classList after update:', this.dialogContainer.classList);
     }
     
     // Hide dialog

@@ -71,6 +71,11 @@ class Game {
         const libraryPromise = this.library.initialize();
         
         // Generate character story
+        console.log('Calling showStoryDialog to display loading message');
+        // Ensure the book container is hidden before showing the story dialog
+        this.ui.bookContainer.classList.add('hidden');
+        this.ui.bookContainer.style.display = 'none';
+        console.log('Hiding book container before showing story dialog');
         this.ui.showStoryDialog('<p>Generating your story, please wait...</p>');
         const story = await this.api.generateCharacterStory(name, description);
         

@@ -66,7 +66,7 @@ class UITests {
     }
       createTestDOM() {
         // Check if we need to create test elements
-        if (!document.getElementById('dialog-container')) {
+        if (!document.getElementById('dialog-container') || !document.getElementById('dialog-content')) {
             console.log('Creating test DOM elements for UI tests...');
             
             // Create game container and canvas
@@ -250,17 +250,16 @@ class UITests {
         const originalStartGameLoop = game.startGameLoop;
         
         let storyDialogShown = false;
-        let gameLoopStarted = false;
-        
-        ui.showStoryDialog = (content) => {
+        let gameLoopStarted = false;        ui.showStoryDialog = (content) => {
             storyDialogShown = true;
-            // Call original but without side effects for testing
-            ui._isStoryDialogShowing = true;
+            console.log('Story dialog shown with content:', content); // Add debug log
+            // Call the original implementation to ensure proper behavior
+            originalShowStoryDialog.call(ui, content);
         };
         
         ui.hideDialog = () => {
-            // Call original but without side effects for testing
-            ui._isStoryDialogShowing = false;
+            // Call the original implementation to ensure proper behavior
+            originalHideDialog.call(ui);
         };
         
         game.startGameLoop = () => {
@@ -279,10 +278,15 @@ class UITests {
         
         // Start game with test character
         await game.startGame('Test Player', 'Test description');
-        
-        this.assert(
+          this.assert(
             storyDialogShown,
             'Story dialog should be shown during game start'
+        );
+
+        // Directly check if the dialog container is visible
+        this.assert(
+            !ui.dialogContainer.classList.contains('hidden'),
+            'Dialog container should not have the hidden class during game start'
         );
         
         this.assert(
